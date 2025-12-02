@@ -1,6 +1,5 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import {
-  LayoutDashboard,
   Users,
   UserPlus,
   List,
@@ -34,7 +33,6 @@ function DashboardLayout() {
       <div className="w-64 bg-gray-900 text-white flex flex-col p-5 gap-3">
         <h1 className="text-xl font-bold mb-6">Student Admin</h1>
 
-        <SidebarItem to="/" icon={LayoutDashboard} label="Dashboard" />
         <SidebarItem to="/students" icon={List} label="Student List" />
         <SidebarItem to="/add" icon={UserPlus} label="Add Student" />
         <SidebarItem to="/filters" icon={Users} label="Filters" />

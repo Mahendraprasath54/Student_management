@@ -18,6 +18,18 @@ const getAllStudents = async (req, res) => {
   }
 };
 
+const getStudentById = async (req, res) => {
+  try {
+    const student = await Student.findById(req.params.id);
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+    res.json(student);
+  } catch (err) {
+    res.status(500).json({ error: "Cannot fetch student" });
+  }
+};
+
 const searchStudents = async (req, res) => {
   try {
     const { search } = req.query;
@@ -47,6 +59,27 @@ const searchStudents = async (req, res) => {
   }
 };
 
+const filterStudents = async (req, res) => {
+  try {
+    const { department, city, year } = req.query;
+
+    const filter = {};
+    if (department && department !== "all") {
+      filter.department = new RegExp(`^${department}$`, "i");
+    }
+    if (city && city !== "all") {
+      filter.city = new RegExp(`^${city}$`, "i");
+    }
+    if (year && year !== "all") filter.year = Number(year);
+
+    const students = await Student.find(filter);
+    res.json(students);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Cannot filter students" });
+  }
+};
+
 
 const updateStudent = async (req, res) => {
   try {
@@ -73,7 +106,9 @@ const deleteStudent = async (req, res) => {
 module.exports = {
   addStudent,
   getAllStudents,
+  getStudentById,
   searchStudents,
   updateStudent,
-  deleteStudent
+  deleteStudent,
+  filterStudents
 };
