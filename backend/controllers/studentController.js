@@ -22,20 +22,31 @@ const searchStudents = async (req, res) => {
   try {
     const { search } = req.query;
 
+    const regex = new RegExp(search, "i"); 
+
     const students = await Student.find({
       $or: [
-        { name: { $regex: search, $options: "i" } },
-        { rollNo: { $regex: search, $options: "i" } },
-        { email: { $regex: search, $options: "i" } },
-        { department: { $regex: search, $options: "i" } }
-      ]
+        { name: regex },
+        { rollNo: regex },
+        { email: regex },
+        { contact: regex },
+        { department: regex },
+        { address: regex },
+        { city: regex },
+        { state: regex },
+        { country: regex },
+        { cgpa: isNaN(search) ? undefined : Number(search) }
+      ].filter(Boolean)
     });
 
     res.json(students);
+
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: "Cannot search students" });
   }
 };
+
 
 const updateStudent = async (req, res) => {
   try {
